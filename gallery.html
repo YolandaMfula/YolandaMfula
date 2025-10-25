@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mood Gallery - MoodWeather</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>MoodWeather</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="history.html">History</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+
+  <main>
+    <div id="welcome"></div>
+    
+    <section id="gallery-section">
+      <h2>Your Mood Gallery</h2>
+      <div id="gallery-stats" class="card">
+        <p>Loading your mood statistics...</p>
+      </div>
+      
+      <!-- Search and Filter Controls -->
+      <div id="gallery-controls" class="card">
+        <input type="text" id="searchInput" placeholder="Search by mood or date..." />
+        <select id="moodFilter">
+          <option value="">All Moods</option>
+          <option value="Happy">😊 Happy</option>
+          <option value="Sad">😢 Sad</option>
+          <option value="Excited">🤩 Excited</option>
+          <option value="Calm">😌 Calm</option>
+          <option value="Anxious">😰 Anxious</option>
+          <option value="Angry">😠 Angry</option>
+        </select>
+        <button id="clearFilters">Clear Filters</button>
+      </div>
+      
+      <div id="gallery-grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 MoodWeather</p>
+  </footer>
+
+  <script src="js/theme.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/profile.js"></script>
+  <script>
+    // Global variables for filtering
+    let allMoods = [];
+    let filteredMoods = [];
+
+    // Load and display mood gallery
+    document.addEventListener("DOMContentLoaded", function() {
+      displayMoodGallery();
+      setupFilters();
+    });
+
+    function setupFilters() {
+      const searchInput = document.getElementById('searchInput');
+      const moodFilter = document.getElementById('moodFilter');
+      const clearFilters = document.getElementById('clearFilters');
+
+      searchInput.addEventListener('input', filterMoods);
+      moodFilter.addEventListener('change', filterMoods);
+      clearFilters.addEventListener('click', function() {
+        searchInput.value = '';
+        moodFilter.value = '';
+        filterMoods();
+      });
+    }
+
+    function filterMoods() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const selectedMood = document.getElementById('moodFilter').value;
+
+      filteredMoods = allMoods.filter(entry => {
+        const matchesSearch = entry.mood.toLowerCase().includes(searchTerm) || 
+                            entry.timestamp.toLowerCase().includes(searchTerm) ||
+                            (entry.weather && entry.weather.toLowerCase().includes(searchTerm));
+        
+        const matchesMood = !selectedMood || entry.mood === selectedMood;
+        
+        return matchesSearch && matchesMood;
+      });
+
+      displayFilteredMoods();
+    }
+
+    function displayFilteredMoods() {
+      const galleryGrid = document.getElementById("gallery-grid");
+      
+      if (filteredMoods.length === 0) {
+        galleryGrid.innerHTML = '<div class="card"><p>No mood entries match your filters.</p></div>';
+        return;
+      }
+
+      galleryGrid.innerHTML = "";
+      filteredMoods.forEach(entry => {
+        const card = document.createElement("div");
+        card.className = "mood-card";
+        card.innerHTML = `
+          <h3>${entry.mood}</h3>
+          <p><small>${entry.timestamp}</small></p>
+          <p>Weather: ${entry.weather || 'Unknown'}</p>
+        `;
+        galleryGrid.appendChild(card);
+      });
+    }
+
+    function displayMoodGallery() {
+      try {
+        const moodHistory = JSON.parse(localStorage.getItem("moodHistory") || "[]");
+        const galleryGrid = document.getElementById("gallery-grid");
+        const galleryStats = document.getElementById("gallery-stats");
+        
+        if (moodHistory.length === 0) {
+          galleryGrid.innerHTML = '<div class="card"><p>No mood entries yet. <a href="index.html">Start logging your moods!</a></p></div>';
+          galleryStats.innerHTML = '<h3>No data to display</h3>';
+          return;
+        }
+
+        // Display statistics
+        const moods = {};
+        for (let i = 0; i < moodHistory.length; i++) {
+          const mood = moodHistory[i].mood;
+          moods[mood] = (moods[mood] || 0) + 1;
+        }
+
+        galleryStats.innerHTML = `
+          <h3>Your Mood Summary</h3>
+          <p>Total entries: ${moodHistory.length}</p>
+          <p>Most common mood: ${Object.keys(moods).reduce((a, b) => moods[a] > moods[b] ? a : b)}</p>
+        `;
+
+        // Store all moods globally and display
+        allMoods = [...moodHistory].reverse();
+        filteredMoods = [...allMoods];
+        displayFilteredMoods();
+      } catch (error) {
+        console.error("Error displaying mood gallery:", error);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Reflection - MoodWeather</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>MoodWeather</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="history.html">History</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="reflection.html">Reflection</a>
+    </nav>
+    <button id="theme-toggle">🌙</button>
+  </header>
+
+  <main>
+    <section id="reflection-section">
+      <h2>Project Reflection</h2>
+      <div class="card">
+        <h3>What was your biggest learning moment?</h3>
+        <p>
+          My biggest learning moment was understanding how localStorage works with user authentication and data persistence. Initially, I struggled with managing user sessions and storing mood history data reliably. Learning to structure data properly in localStorage and implementing user-specific data storage taught me valuable lessons about client-side state management. I also discovered the importance of error handling when working with JSON parsing and localStorage operations, especially when dealing with edge cases like empty data or corrupted storage.
+        </p>
+
+        <h3>What feature are you most proud of?</h3>
+        <p>
+          I'm most proud of the dynamic search and filtering system in the gallery page. It combines real-time text search with mood-based filtering, allowing users to instantly find specific entries from their mood history. The feature demonstrates good user experience design by providing immediate feedback as users type, and the implementation showcases JavaScript array methods, event handling, and DOM manipulation working together seamlessly. The visual feedback and responsive design make it feel like a professional web application feature.
+        </p>
+
+        <h3>What would you add or improve with more time?</h3>
+        <p>
+          With more time, I would add a proper backend database instead of relying on localStorage, implement mood analytics with trend predictions, and add social features like sharing mood insights. I'd also improve the weather integration with more detailed forecasts, add mood reminders/notifications, implement data export functionality, and create a more sophisticated charting system with customizable time ranges. Additionally, I would enhance the UI with animations, better mobile responsiveness, and accessibility features for users with disabilities.
+        </p>
+
+        <div class="project-stats">
+          <h3>Project Statistics</h3>
+          <ul>
+            <li><strong>Total Pages:</strong> 7 HTML files</li>
+            <li><strong>JavaScript Files:</strong> 5 modules</li>
+            <li><strong>Key Features:</strong> Authentication, Weather API, Data Visualization, Theme Toggle, Search & Filter</li>
+            <li><strong>Development Time:</strong> Multiple iterations with continuous improvements</li>
+            <li><strong>Technologies Used:</strong> HTML5, CSS3, Vanilla JavaScript, Chart.js, LocalStorage</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 MoodWeather</p>
+  </footer>
+
+  <script src="js/theme.js"></script>
+</body>
+</html>
